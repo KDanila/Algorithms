@@ -59,7 +59,7 @@ public class Percolation {
     }
 
     private int transformToWeightedIndex(int row, int col) {
-        return ((row) * percolationGrid.length) - percolationGrid.length + (col);
+        return ((row) * percolationGrid.length) - percolationGrid.length + (col) - 1;
     }
 
     // is the site (row, col) open?
