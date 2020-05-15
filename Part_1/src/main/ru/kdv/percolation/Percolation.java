@@ -3,32 +3,32 @@ package ru.kdv.percolation;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int[][] percolationGrid;
+    private boolean[][] percolationGrid;
     private int openSideNumber;
-    WeightedQuickUnionUF weightedQuickUnionUF;
+    private final WeightedQuickUnionUF weightedQuickUnionUF;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
         check(n);
         weightedQuickUnionUF = new WeightedQuickUnionUF(n * n);
-        percolationGrid = new int[n][n];
+        percolationGrid = new boolean[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                percolationGrid[i][j] = 0;
+                percolationGrid[i][j] = false;
             }
         }
     }
 
 
     // opens the site (row, col) if it is not open already
-    public void open(int row, int col) throws IllegalArgumentException {
+    public void open(int row, int col){
         check(row, col);
         if (isOpen(row, col)) {
             return;
         }
         row--;
         col--;
-        percolationGrid[row][col] = 1;
+        percolationGrid[row][col] = true;
         checkAndUnionNearestCell(row, col);
         openSideNumber++;
     }
@@ -36,22 +36,22 @@ public class Percolation {
     private void checkAndUnionNearestCell(int row, int col) {
         int indexOne = transformToWeightedIndex(row + 1, col + 1);
         int indexTwo;
-        //check up cell
+        // check up cell
         if (isOpen(row, col + 1)) {
             indexTwo = transformToWeightedIndex(row, col + 1);
             weightedQuickUnionUF.union(indexOne, indexTwo);
         }
-        //check left cell
+        // check left cell
         if (isOpen(row + 1, col)) {
             indexTwo = transformToWeightedIndex(row + 1, col);
             weightedQuickUnionUF.union(indexOne, indexTwo);
         }
-        //check right cell
+        // check right cell
         if (isOpen(row + 1, col + 1 + 1)) {
             indexTwo = transformToWeightedIndex(row + 1, col + 1 + 1);
             weightedQuickUnionUF.union(indexOne, indexTwo);
         }
-        //check bottom cell
+        // check bottom cell
         if (isOpen(row + 1 + 1, col + 1)) {
             indexTwo = transformToWeightedIndex(row + 1 + 1, col + 1);
             weightedQuickUnionUF.union(indexOne, indexTwo);
@@ -69,7 +69,7 @@ public class Percolation {
         if (row < 0 || row > percolationGrid.length - 1 || col < 0 || col > percolationGrid.length - 1) {
             return false;
         }
-        return percolationGrid[row][col] == 1;
+        return percolationGrid[row][col] == true;
     }
 
     // is the site (row, col) full?
@@ -113,7 +113,7 @@ public class Percolation {
         }
     }
 
-    private void check(int row, int col) throws IllegalArgumentException {
+    private void check(int row, int col) {
         if (row <= 0 || row > percolationGrid.length) {
             throw new IllegalArgumentException("Row is out of range");
         }
@@ -122,11 +122,11 @@ public class Percolation {
         }
     }
 
-    public void setPercolationGrid(int[][] percolationGrid) {
+    public void setPercolationGrid(boolean[][] percolationGrid) {
         this.percolationGrid = percolationGrid;
     }
 
-    public int[][] getPercolationGrid() {
+    public boolean[][] getPercolationGrid() {
         return this.percolationGrid;
     }
 }

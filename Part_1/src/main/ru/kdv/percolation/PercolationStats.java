@@ -5,15 +5,15 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
     private Percolation percolation;
-    private int trials;
-    private double[] percentageTrials;
+    private final int trials;
+    private final double[] percentageTrials;
 
     // perform independent trials on an n-by-n grid
-    public PercolationStats(int n, int trials) {
-        checkParameters(n, trials);
-        this.trials = trials;
-        percentageTrials = new double[trials];
-        while (trials != 0) {
+    public PercolationStats(int n, int tr) {
+        checkParameters(n, tr);
+        this.trials = tr;
+        percentageTrials = new double[tr];
+        while (tr != 0) {
             percolation = new Percolation(n);
             while (!percolation.percolates()) {
                 int row = StdRandom.uniform(1, n + 1);
@@ -23,7 +23,7 @@ public class PercolationStats {
                 }
             }
             double percentage = (double) percolation.numberOfOpenSites() / (n * n);
-            percentageTrials[--trials] = percentage;
+            percentageTrials[--tr] = percentage;
         }
     }
 
@@ -61,6 +61,5 @@ public class PercolationStats {
         System.out.printf("mean\t\t\t\t = %f\n", percolationStats.mean());
         System.out.printf("stddev\t\t\t\t = %f\n", percolationStats.stddev());
         System.out.printf("95%% confidence interval\t\t\t\t = [%f, %f]\n", percolationStats.confidenceLo(), percolationStats.confidenceHi());
-        //95% confidence interval = [0.666217665216461, 0.6676773347835391]
     }
 }
