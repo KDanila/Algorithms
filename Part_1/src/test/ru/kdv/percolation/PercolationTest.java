@@ -17,7 +17,7 @@ class PercolationTest {
 
     @Test
     public void ifCloseShouldOpen() {
-        int[][] initArray = percolation.getPercolationGrid();
+        boolean[][] initArray = percolation.getPercolationGrid();
         percolation.open(1, 1);
         assertTrue(percolation.isOpen(1, 1));
         assertFalse(percolation.isOpen(1, 2));

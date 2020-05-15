@@ -6,22 +6,23 @@ public class Percolation {
     private boolean[][] percolationGrid;
     private int openSideNumber;
     private final WeightedQuickUnionUF weightedQuickUnionUF;
+    private final int top;
+    private final int bottom;
+    private final int size;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
         check(n);
-        weightedQuickUnionUF = new WeightedQuickUnionUF(n * n);
+        weightedQuickUnionUF = new WeightedQuickUnionUF(n * n + 1);
         percolationGrid = new boolean[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                percolationGrid[i][j] = false;
-            }
-        }
+        top = 0;
+        bottom = n * n;
+        size = n;
     }
 
 
     // opens the site (row, col) if it is not open already
-    public void open(int row, int col){
+    public void open(int row, int col) {
         check(row, col);
         if (isOpen(row, col)) {
             return;
@@ -36,6 +37,14 @@ public class Percolation {
     private void checkAndUnionNearestCell(int row, int col) {
         int indexOne = transformToWeightedIndex(row + 1, col + 1);
         int indexTwo;
+        // union 1st row with top level
+        if (row == 0) {
+            weightedQuickUnionUF.union(top, indexOne);
+        }
+        // union last row with bottom level
+        if (row == size - 1) {
+            weightedQuickUnionUF.union(bottom, indexOne);
+        }
         // check up cell
         if (isOpen(row, col + 1)) {
             indexTwo = transformToWeightedIndex(row, col + 1);
@@ -59,17 +68,17 @@ public class Percolation {
     }
 
     private int transformToWeightedIndex(int row, int col) {
-        return ((row) * percolationGrid.length) - percolationGrid.length + (col) - 1;
+        return ((row) * size) - size + (col) - 1;
     }
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
         row--;
         col--;
-        if (row < 0 || row > percolationGrid.length - 1 || col < 0 || col > percolationGrid.length - 1) {
+        if (row < 0 || row > size - 1 || col < 0 || col > size - 1) {
             return false;
         }
-        return percolationGrid[row][col] == true;
+        return percolationGrid[row][col];
     }
 
     // is the site (row, col) full?
@@ -78,13 +87,7 @@ public class Percolation {
             return false;
         }
         int cellOne = transformToWeightedIndex(row, col);
-        for (int i = 1; i <= percolationGrid[0].length; i++) {
-            int cellTwo = transformToWeightedIndex(1, i);
-            if (isOpen(1, i) && (weightedQuickUnionUF.find(cellOne) == weightedQuickUnionUF.find(cellTwo))) {
-                return true;
-            }
-        }
-        return false;
+        return weightedQuickUnionUF.connected(top, cellOne);
     }
 
     // returns the number of open sites
@@ -94,17 +97,8 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        int size = percolationGrid[0].length;
-        for (int i = 1; i <= size; i++) {
-            int cellOne = transformToWeightedIndex(1, i);
-            for (int j = 1; j <= size; j++) {
-                int cellTwo = transformToWeightedIndex(size, j);
-                if (isOpen(1, i) && isOpen(size, j) && (weightedQuickUnionUF.find(cellOne) == weightedQuickUnionUF.find(cellTwo))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+
+        return weightedQuickUnionUF.connected(top, bottom);
     }
 
     private void check(int n) {
