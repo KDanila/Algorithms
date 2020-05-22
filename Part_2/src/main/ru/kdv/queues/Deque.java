@@ -1,14 +1,18 @@
 package main.ru.kdv.queues;
 
+import lombok.Data;
+
 import java.util.Iterator;
 
+@Data
 public class Deque<Item> implements Iterable<Item> {
-    private Node itemFirst;
-    private Node itemLast;
+    private Node firstNode;
+    private Node lastNode;
     private int size;
 
     // construct an empty deque
     public Deque() {
+        firstNode = lastNode = new Node(null);
     }
 
     // is the deque empty?
@@ -25,7 +29,14 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the front
     public void addFirst(Item item) {
         checkBeforeAddArgument(item);
-        resizeArray();
+        if (size == 0) {
+            firstNode.item = lastNode.item = item;
+        } else {
+            Node firstOld = firstNode;
+            firstNode = new Node(item);
+            firstNode.previous = firstOld;
+            firstOld.next = firstNode;
+        }
         size++;
     }
 
@@ -33,24 +44,43 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the back
     public void addLast(Item item) {
         checkBeforeAddArgument(item);
-        resizeArray();
+        if (size == 0) {
+            firstNode.item = lastNode.item = item;
+        } else {
+            Node lastOld = lastNode;
+            lastNode = new Node(item);
+            lastNode.next = lastOld;
+            lastOld.previous = lastNode;
+        }
         size++;
     }
 
     // remove and return the item from the front
     public Item removeFirst() {
         checkBeforeRemoveArgument();
-        resizeArray();
+        Item item = (Item) firstNode.item;
+        if (size == 1) {
+            firstNode.previous = lastNode.next = null;
+        } else {
+            firstNode = firstNode.previous;
+            firstNode.next = null;
+        }
         size--;
-        return null;
+        return item;
     }
 
     // remove and return the item from the back
     public Item removeLast() {
         checkBeforeRemoveArgument();
-        resizeArray();
+        Item item = (Item) lastNode.item;
+        if (size == 1) {
+            lastNode.next = firstNode.previous = null;
+        } else {
+            lastNode = lastNode.next;
+            lastNode.previous = null;
+        }
         size--;
-        return null;
+        return item;
     }
 
     /*
@@ -60,14 +90,18 @@ public class Deque<Item> implements Iterable<Item> {
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
         return new Iterator<Item>() {
+            Node<Item> currentNode = lastNode;
+
             @Override
             public boolean hasNext() {
-                return false;
+                return currentNode.next != null;
             }
 
             @Override
             public Item next() {
-                return null;
+                Item item = currentNode.item;
+                currentNode = currentNode.next;
+                return item;
             }
         };
     }
@@ -85,35 +119,24 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private void checkBeforeRemoveArgument() {
-
+        if (size == 0) {
+            throw new IllegalArgumentException("Deque is empty");
+        }
     }
-
-    private void resizeArray() {
-//        if (itemNumber == items.length) {
-//            Node[] copy = (Node[]) new Object[items.length * 2];
-//            for (int i = 0; i < items.length; i++) {
-//                copy[i] = items[i];
-//            }
-//            items = copy;
-//        }
-//        if (itemNumber <= items.length / 4) {
-//            Node[] copy = (Node[]) new Object[items.length / 2];
-//            for (int i = 0; i < items.length; i++) {
-//                copy[i] = items[i];
-//            }
-//            items = copy;
-//        }
-    }
-
 
     // unit testing (required)
     public static void main(String[] args) {
 
     }
 
-    private class Node {
-        Item item;
-        Node next;
-        Node previous;
+    @Data
+    public static class Node<Item> {
+        private Item item;
+        private Node next;
+        private Node previous;
+
+        public Node(Item item) {
+            this.item = item;
+        }
     }
 }
