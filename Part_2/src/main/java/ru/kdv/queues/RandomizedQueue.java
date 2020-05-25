@@ -1,4 +1,4 @@
-package main.ru.kdv.queues;
+package ru.kdv.queues;
 
 import java.util.Iterator;
 

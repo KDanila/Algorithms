@@ -1,6 +1,5 @@
-package test.ru.kdv.queues;
+package ru.kdv.queues;
 
-import main.ru.kdv.queues.Deque;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

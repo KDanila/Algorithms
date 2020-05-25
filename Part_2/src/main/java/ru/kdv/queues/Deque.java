@@ -1,4 +1,4 @@
-package main.ru.kdv.queues;
+package ru.kdv.queues;
 
 import lombok.Data;
 import lombok.Getter;
@@ -86,7 +86,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
-        return new Iterator<>() {
+        return new Iterator<Item>() {
             private Node<Item> currentNode = lastNode;
 
             @Override
