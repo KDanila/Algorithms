@@ -4,6 +4,8 @@ import main.ru.kdv.queues.Deque;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DequeTest {
@@ -75,9 +77,16 @@ class DequeTest {
         deque.addFirst("Second");
         deque.addLast("Third");
         deque.addLast("Fourth");
-        System.out.println(deque.iterator().next());
-        System.out.println(deque.iterator().next());
-        System.out.println(deque.iterator().next());
+        Iterator<String> iterator = deque.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals("Fourth", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("Third", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("First", iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals("Second", iterator.next());
+        assertFalse(iterator.hasNext());
     }
 
 

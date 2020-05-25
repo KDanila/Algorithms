@@ -1,6 +1,7 @@
 package main.ru.kdv.queues;
 
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.Iterator;
 
@@ -58,7 +59,7 @@ public class Deque<Item> implements Iterable<Item> {
     // remove and return the item from the front
     public Item removeFirst() {
         checkBeforeRemoveArgument();
-        Item item = (Item) firstNode.item;
+        Item item = firstNode.item;
         if (size == 1) {
             firstNode.previous = lastNode.next = null;
         } else {
@@ -72,7 +73,7 @@ public class Deque<Item> implements Iterable<Item> {
     // remove and return the item from the back
     public Item removeLast() {
         checkBeforeRemoveArgument();
-        Item item = (Item) lastNode.item;
+        Item item = lastNode.item;
         if (size == 1) {
             lastNode.next = firstNode.previous = null;
         } else {
@@ -95,6 +96,9 @@ public class Deque<Item> implements Iterable<Item> {
 
             @Override
             public Item next() {
+                if(currentNode == null){
+                    throw new UnsupportedOperationException("iterator next element is null");
+                }
                 Item item = currentNode.item;
                 currentNode = currentNode.next;
                 return item;
@@ -119,11 +123,12 @@ public class Deque<Item> implements Iterable<Item> {
 
     }
 
-    @Data
+    @Getter
     public static class Node<Item> {
         private Item item;
         private Node<Item> next;
         private Node<Item> previous;
+
         public Node(Item item) {
             this.item = item;
         }
