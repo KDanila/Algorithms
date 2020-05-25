@@ -6,13 +6,13 @@ import java.util.Iterator;
 
 @Data
 public class Deque<Item> implements Iterable<Item> {
-    private Node firstNode;
-    private Node lastNode;
+    private Node<Item> firstNode;
+    private Node<Item> lastNode;
     private int size;
 
     // construct an empty deque
     public Deque() {
-        firstNode = lastNode = new Node(null);
+        firstNode = lastNode = new Node<>(null);
     }
 
     // is the deque empty?
@@ -32,8 +32,8 @@ public class Deque<Item> implements Iterable<Item> {
         if (size == 0) {
             firstNode.item = lastNode.item = item;
         } else {
-            Node firstOld = firstNode;
-            firstNode = new Node(item);
+            Node<Item> firstOld = firstNode;
+            firstNode = new Node<>(item);
             firstNode.previous = firstOld;
             firstOld.next = firstNode;
         }
@@ -47,8 +47,8 @@ public class Deque<Item> implements Iterable<Item> {
         if (size == 0) {
             firstNode.item = lastNode.item = item;
         } else {
-            Node lastOld = lastNode;
-            lastNode = new Node(item);
+            Node<Item> lastOld = lastNode;
+            lastNode = new Node<>(item);
             lastNode.next = lastOld;
             lastOld.previous = lastNode;
         }
@@ -83,18 +83,14 @@ public class Deque<Item> implements Iterable<Item> {
         return item;
     }
 
-    /*
-     Throw a java.util.NoSuchElementException if the client calls the next() method in the iterator when there are no more items to return.
-        Throw an UnsupportedOperationException if the client calls the remove() method in the iterator.
-     */
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
-        return new Iterator<Item>() {
-            Node<Item> currentNode = lastNode;
+        return new Iterator<>() {
+            private Node<Item> currentNode = lastNode;
 
             @Override
             public boolean hasNext() {
-                return currentNode.next != null;
+                return currentNode != null;
             }
 
             @Override
@@ -106,12 +102,6 @@ public class Deque<Item> implements Iterable<Item> {
         };
     }
 
-    /*
-
-       Throw an IllegalArgumentException if the client calls either addFirst() or addLast() with a null argument.
-       Throw a java.util.NoSuchElementException if the client calls either removeFirst() or removeLast when the deque is empty.
-
-        */
     private void checkBeforeAddArgument(Item item) {
         if (item == null) {
             throw new IllegalArgumentException("wrong value");
@@ -132,9 +122,8 @@ public class Deque<Item> implements Iterable<Item> {
     @Data
     public static class Node<Item> {
         private Item item;
-        private Node next;
-        private Node previous;
-
+        private Node<Item> next;
+        private Node<Item> previous;
         public Node(Item item) {
             this.item = item;
         }
