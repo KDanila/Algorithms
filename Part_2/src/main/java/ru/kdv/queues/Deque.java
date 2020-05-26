@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 @Data
 public class Deque<Item> implements Iterable<Item> {
@@ -13,7 +14,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     // construct an empty deque
     public Deque() {
-        firstNode = lastNode = new Node<>(null);
+        firstNode = lastNode = null;
     }
 
     // is the deque empty?
@@ -31,7 +32,7 @@ public class Deque<Item> implements Iterable<Item> {
     public void addFirst(Item item) {
         checkBeforeAddArgument(item);
         if (size == 0) {
-            firstNode.item = lastNode.item = item;
+            firstNode = lastNode = new Node<>(item);
         } else {
             Node<Item> firstOld = firstNode;
             firstNode = new Node<>(item);
@@ -46,7 +47,7 @@ public class Deque<Item> implements Iterable<Item> {
     public void addLast(Item item) {
         checkBeforeAddArgument(item);
         if (size == 0) {
-            firstNode.item = lastNode.item = item;
+            firstNode = lastNode = new Node<>(item);
         } else {
             Node<Item> lastOld = lastNode;
             lastNode = new Node<>(item);
@@ -96,8 +97,8 @@ public class Deque<Item> implements Iterable<Item> {
 
             @Override
             public Item next() {
-                if(currentNode == null){
-                    throw new UnsupportedOperationException("iterator next element is null");
+                if (currentNode == null) {
+                    throw new NoSuchElementException("iterator next element is null");
                 }
                 Item item = currentNode.item;
                 currentNode = currentNode.next;
@@ -108,13 +109,13 @@ public class Deque<Item> implements Iterable<Item> {
 
     private void checkBeforeAddArgument(Item item) {
         if (item == null) {
-            throw new IllegalArgumentException("wrong value");
+            throw new NoSuchElementException("wrong value");
         }
     }
 
     private void checkBeforeRemoveArgument() {
         if (size == 0) {
-            throw new IllegalArgumentException("Deque is empty");
+            throw new NoSuchElementException("Deque is empty");
         }
     }
 

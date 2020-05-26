@@ -3,6 +3,7 @@ package ru.kdv.queues;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
@@ -102,7 +103,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         @Override
         public Item next() {
             if (counter > size) {
-                throw new UnsupportedOperationException("iterator next element is null");
+                throw new NoSuchElementException("iterator next element is null");
             }
             return (Item) items[++counter];
         }

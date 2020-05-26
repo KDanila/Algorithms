@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,8 +23,8 @@ class DequeTest {
 
     @Test
     public void ifRemoveArgumentInEmptyDequeShouldThrowException() {
-        assertThrows(IllegalArgumentException.class, () -> deque.removeFirst());
-        assertThrows(IllegalArgumentException.class, () -> deque.removeLast());
+        assertThrows(NoSuchElementException.class, () -> deque.removeFirst());
+        assertThrows(NoSuchElementException.class, () -> deque.removeLast());
     }
 
     @Test
