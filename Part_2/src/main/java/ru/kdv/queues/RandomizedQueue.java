@@ -1,11 +1,13 @@
 package ru.kdv.queues;
 
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Iterator;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    Item[] items;
-    int size;
+    private Item[] items;
+    private int size;
 
     // construct an empty randomized queue
     public RandomizedQueue() {
@@ -27,7 +29,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         checkBeforeAddArgument(item);
         items[size++] = item;
         resizedItems();
-        size++;
     }
 
     private void checkBeforeAddArgument(Item item) {
@@ -44,8 +45,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         } else if (length / 4 >= size) {
             newItems = (Item[]) new Object[length / 2];
         }
-        if (items != newItems) {
-            for (int i = 0; i < newItems.length; i++) {
+        if (items != newItems && newItems != null) {
+            int minLength = items.length < newItems.length ? items.length : newItems.length;
+            for (int i = 0; i < minLength; i++) {
                 newItems[i] = items[i];
             }
             items = newItems;
@@ -54,17 +56,56 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // remove and return a random item
     public Item dequeue() {
-        return null;
+        int random = StdRandom.uniform(0, size);
+        Item toReturn = items[random];
+        for (int i = random; i < items.length - 1; i++) {
+            items[i] = items[i + 1];
+        }
+        size--;
+        resizedItems();
+        return toReturn;
     }
 
     // return a random item (but do not remove it)
     public Item sample() {
-        return null;
+        int random = StdRandom.uniform(0, size);
+        return items[random];
     }
 
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
-        return null;
+        return new RandomizedQueueIterator<Item>();
+    }
+
+    private class RandomizedQueueIterator<Item> implements Iterator<Item> {
+        private int counter = 0;
+        private Item[] iteratorItems = (Item[]) items;
+
+        RandomizedQueueIterator() {
+            shuffleItems();
+        }
+
+        private void shuffleItems() {
+            for (int i = 0; i < size; i++) {
+                int random = StdRandom.uniform(0, size);
+                Item temp = (Item) iteratorItems[i];
+                iteratorItems[i] = iteratorItems[random];
+                iteratorItems[random] = temp;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return counter != size;
+        }
+
+        @Override
+        public Item next() {
+            if (counter > size) {
+                throw new UnsupportedOperationException("iterator next element is null");
+            }
+            return (Item) items[++counter];
+        }
     }
 
     // unit testing (required)

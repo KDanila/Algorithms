@@ -3,6 +3,8 @@ package ru.kdv.queues;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RandomizedQueueTest {
@@ -22,6 +24,30 @@ class RandomizedQueueTest {
     public void whenAddShouldReturnSizeOne() {
         queue.enqueue("One");
         assertEquals(1, queue.size());
+    }
+
+    @Test
+    public void whenRemoveShouldReturnCorrectSize() {
+        queue.enqueue("One");
+        queue.enqueue("Two");
+        String s = queue.dequeue();
+        assertEquals(1, queue.size());
+    }
+
+    @Test
+    public void whenUseSampleShouldReturnCorrectSize() {
+        queue.enqueue("1");
+        queue.enqueue("2");
+        queue.enqueue("3");
+        queue.enqueue("4");
+        queue.enqueue("5");
+        queue.enqueue("6");
+
+        Iterator<String> iterator = queue.iterator();
+        System.out.println(iterator.next());
+        System.out.println(iterator.next());
+        System.out.println(iterator.next());
+        System.out.println(iterator.next());
     }
 
 
