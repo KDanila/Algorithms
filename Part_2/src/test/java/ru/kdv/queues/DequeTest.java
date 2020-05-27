@@ -89,5 +89,18 @@ class DequeTest {
         assertFalse(iterator.hasNext());
     }
 
-
+    @Test
+    void whenArrayEmptyShouldReturnNoElement() {
+        deque.addFirst("First");
+        deque.addFirst("Second");
+        deque.addLast("Third");
+        deque.addLast("Fourth");
+        deque.removeFirst();
+        deque.removeFirst();
+        deque.removeFirst();
+        deque.removeFirst();
+        Iterator<String> iterator = deque.iterator();
+        assertFalse(iterator.hasNext());
+        assertThrows(NoSuchElementException.class , iterator::next);
+    }
 }

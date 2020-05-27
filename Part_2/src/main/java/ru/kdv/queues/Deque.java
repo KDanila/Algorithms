@@ -62,7 +62,7 @@ public class Deque<Item> implements Iterable<Item> {
         checkBeforeRemoveArgument();
         Item item = firstNode.item;
         if (size == 1) {
-            firstNode.previous = lastNode.next = null;
+            firstNode = lastNode = null;
         } else {
             firstNode = firstNode.previous;
             firstNode.next = null;
@@ -76,7 +76,7 @@ public class Deque<Item> implements Iterable<Item> {
         checkBeforeRemoveArgument();
         Item item = lastNode.item;
         if (size == 1) {
-            lastNode.next = firstNode.previous = null;
+            lastNode = firstNode = null;
         } else {
             lastNode = lastNode.next;
             lastNode.previous = null;
@@ -109,7 +109,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     private void checkBeforeAddArgument(Item item) {
         if (item == null) {
-            throw new NoSuchElementException("wrong value");
+            throw new IllegalArgumentException("wrong value");
         }
     }
 

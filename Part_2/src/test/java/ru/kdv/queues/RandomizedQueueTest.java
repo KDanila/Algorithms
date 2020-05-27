@@ -42,13 +42,13 @@ class RandomizedQueueTest {
         queue.enqueue("4");
         queue.enqueue("5");
         queue.enqueue("6");
+        queue.enqueue("7");
+        queue.enqueue("8");
+        queue.enqueue("9");
+        queue.enqueue("10");
 
-        Iterator<String> iterator = queue.iterator();
-        System.out.println(iterator.next());
-        System.out.println(iterator.next());
-        System.out.println(iterator.next());
-        System.out.println(iterator.next());
+        for (String s : queue) {
+            System.out.println(s);
+        }
     }
-
-
 }
