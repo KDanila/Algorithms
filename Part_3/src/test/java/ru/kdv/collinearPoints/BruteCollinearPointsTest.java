@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BruteCollinearPointsTest {
     BruteCollinearPoints bruteCollinearPointsOneLine;
+    BruteCollinearPoints bruteCollinearPointsOneLineTwo;
     BruteCollinearPoints bruteCollinearPointsNotOneLine;
 
     @BeforeEach
@@ -14,15 +15,22 @@ class BruteCollinearPointsTest {
         Point[] pointsOneLine = {new Point(1, 1),
                 new Point(2, 2),
                 new Point(3, 3),
-                new Point(5, 4)
+                new Point(5, 5)
         };
         Point[] pointsOneLineTwo = {new Point(1, 1),
+                new Point(2, 2),
+                new Point(3, 3),
+                new Point(3, 7),
+                new Point(5, 5)
+        };
+        Point[] pointsNotOneLine = {new Point(1, 1),
                 new Point(2, 2),
                 new Point(3, 7),
                 new Point(5, 4)
         };
         bruteCollinearPointsOneLine = new BruteCollinearPoints(pointsOneLine);
-        bruteCollinearPointsNotOneLine = new BruteCollinearPoints(pointsOneLineTwo);
+        bruteCollinearPointsOneLineTwo = new BruteCollinearPoints(pointsOneLineTwo);
+        bruteCollinearPointsNotOneLine = new BruteCollinearPoints(pointsNotOneLine);
     }
 
     @Test
@@ -34,6 +42,18 @@ class BruteCollinearPointsTest {
     @Test
     void whenIncomeArrayIsNullShouldThrowException() {
         assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(null));
+    }
+
+    @Test
+    void whenAddBruteCollinearPointsShouldReturnOneSegment() {
+        LineSegment[] segments = bruteCollinearPointsOneLine.segments();
+        assertEquals(1, bruteCollinearPointsOneLine.numberOfSegments());
+    }
+
+    @Test
+    void whenAddBruteCollinearPointsTwoShouldReturnOneSegment() {
+        LineSegment[] segments = bruteCollinearPointsOneLineTwo.segments();
+        assertEquals(1, bruteCollinearPointsOneLineTwo.numberOfSegments());
     }
 
 }

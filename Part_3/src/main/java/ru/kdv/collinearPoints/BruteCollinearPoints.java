@@ -2,11 +2,15 @@ package ru.kdv.collinearPoints;
 
 public class BruteCollinearPoints {
     private final Point[] points;
+    private int numberOfSegments;
+    private final int NUMBER_OF_SEGMENT_IN_LINE;
 
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
         checkInputPoints(points);
         this.points = points;
+        this.numberOfSegments = 0;
+        this.NUMBER_OF_SEGMENT_IN_LINE = 3;
     }
 
     private void checkInputPoints(Point[] points) {
@@ -27,7 +31,7 @@ public class BruteCollinearPoints {
 
     // the number of line segments
     public int numberOfSegments() {
-        return -1;
+        return this.numberOfSegments;
     }
 
     /**
@@ -47,25 +51,32 @@ public class BruteCollinearPoints {
 
     public LineSegment[] segments() {
         Point pointOne;
-        Point pointTemp;
+        Point pointTwo = points[0];
         double slope = .0;
         int sameSlopePointCounter = 0;
+        LineSegment[] segments = new LineSegment[this.points.length - 1];
         for (int i = 0; i < points.length; i++) {
             pointOne = points[i];
-            for (int j = 0; j < points.length - 1; j++) {
-                pointTemp = points[j];
-                if (j == 0) {
-                    slope = pointOne.slopeTo(pointTemp);
-                    break;
+            for (int j = i + 1; j < points.length; j++) {
+                if (j == i + 1) {
+                    pointTwo = points[j];
+                    slope = pointOne.slopeTo(pointTwo);
+                    sameSlopePointCounter++;
+                    continue;
                 }
-                if (slope == pointOne.slopeTo(pointTemp)) {
+                if (slope == pointOne.slopeTo(points[j])) {
+                    //add biggest last point
+                    if (pointTwo.compareTo(points[j]) < 0) {
+                        pointTwo = points[j];
+                    }
                     sameSlopePointCounter++;
                 }
             }
-
-
+            if (sameSlopePointCounter >= NUMBER_OF_SEGMENT_IN_LINE) {
+                segments[numberOfSegments++] = new LineSegment(pointOne, pointTwo);
+            }
             sameSlopePointCounter = 0;
         }
-        return null;
+        return segments;
     }
 }
