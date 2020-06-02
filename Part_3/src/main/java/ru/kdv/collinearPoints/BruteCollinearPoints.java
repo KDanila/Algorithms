@@ -1,5 +1,7 @@
 package ru.kdv.collinearPoints;
 
+import java.util.Arrays;
+
 public class BruteCollinearPoints {
     private final Point[] points;
     private int numberOfSegments;
@@ -8,7 +10,7 @@ public class BruteCollinearPoints {
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
         checkInputPoints(points);
-        this.points = points;
+        this.points = Arrays.copyOf(points, points.length);
         this.numberOfSegments = 0;
         this.NUMBER_OF_SEGMENT_IN_LINE = 3;
     }

@@ -10,7 +10,7 @@ public class FastCollinearPoints {
     // finds all line segments containing 4 or more points
     public FastCollinearPoints(Point[] points) {
         checkInputPoints(points);
-        this.points = points;
+        this.points = Arrays.copyOf(points, points.length);
         this.numberOfSegments = 0;
         this.NUMBER_OF_SEGMENT_IN_LINE = 3;
     }
