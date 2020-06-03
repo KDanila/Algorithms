@@ -6,13 +6,17 @@ public class BruteCollinearPoints {
     private final Point[] points;
     private int numberOfSegments;
     private final int NUMBER_OF_SEGMENT_IN_LINE;
+    private final LineSegment[] segments;
 
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
         checkInputPoints(points);
         this.points = Arrays.copyOf(points, points.length);
+        Arrays.sort(points);
         this.numberOfSegments = 0;
         this.NUMBER_OF_SEGMENT_IN_LINE = 3;
+        segments = new LineSegment[this.points.length - 1];
+        findSegments();
     }
 
     private void checkInputPoints(Point[] points) {
@@ -20,8 +24,8 @@ public class BruteCollinearPoints {
             throw new IllegalArgumentException("Points = null");
         }
         int nullPoints = 0;
-        for (int i = 0; i < points.length; i++) {
-            if (points[i] != null) {
+        for (Point point : points) {
+            if (point != null) {
                 break;
             }
             nullPoints++;
@@ -48,15 +52,19 @@ public class BruteCollinearPoints {
      * Performance requirement. The order of growth of the running time of your program should be n4 in the worst case
      * and it should use space proportional to n plus the number of line segments returned.
      *
-     * @return
      */
 
     public LineSegment[] segments() {
+        return segments;
+    }
+
+    private void findSegments() {
         Point pointOne;
         Point pointTwo = points[0];
-        double slope = .0;
+        double slope = 0.0;
         int sameSlopePointCounter = 0;
-        LineSegment[] segments = new LineSegment[this.points.length - 1];
+        double[] slopeArray = new double[points.length];
+        initSlopeArray(slopeArray);
         for (int i = 0; i < points.length; i++) {
             pointOne = points[i];
             for (int j = i + 1; j < points.length; j++) {
@@ -75,10 +83,40 @@ public class BruteCollinearPoints {
                 }
             }
             if (sameSlopePointCounter >= NUMBER_OF_SEGMENT_IN_LINE) {
-                segments[numberOfSegments++] = new LineSegment(pointOne, pointTwo);
+                if (checkSameSlope(slopeArray, pointOne.slopeTo(pointTwo))) {
+                    addInSlopeArray(slopeArray, pointOne.slopeTo(pointTwo));
+                    segments[numberOfSegments++] = new LineSegment(pointOne, pointTwo);
+                }
             }
             sameSlopePointCounter = 0;
         }
-        return segments;
+    }
+
+    private void initSlopeArray(double[] slopeArray) {
+        Arrays.fill(slopeArray, Double.NEGATIVE_INFINITY);
+    }
+
+    private void addInSlopeArray(double[] slopeArray, double slope) {
+        for (int i = 0; i < slopeArray.length; i++) {
+            if (slopeArray[i] == slope) {
+                break;
+            }
+            if (slopeArray[i] == Double.NEGATIVE_INFINITY) {
+                slopeArray[i] = slope;
+                break;
+            }
+        }
+    }
+
+    private boolean checkSameSlope(double[] slopeArray, double slope) {
+        if (slopeArray[0] == Double.NEGATIVE_INFINITY) {
+            return true;
+        }
+        for (double v : slopeArray) {
+            if (v == slope) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -11,7 +11,7 @@ class BruteCollinearPointsTest {
     BruteCollinearPoints bruteCollinearPointsNotOneLine;
 
     @BeforeEach
-    public void init() throws InterruptedException {
+    public void init(){
         Point[] pointsOneLine = {new Point(1, 1),
                 new Point(2, 2),
                 new Point(3, 3),
@@ -54,6 +54,16 @@ class BruteCollinearPointsTest {
     void whenAddBruteCollinearPointsTwoShouldReturnOneSegment() {
         LineSegment[] segments = bruteCollinearPointsOneLineTwo.segments();
         assertEquals(1, bruteCollinearPointsOneLineTwo.numberOfSegments());
+    }
+
+    @Test
+    void whenEightCollinearPointsTwoShouldReturnOneSegment() {
+        Point[] points = {new Point(2062, 12045),
+                new Point(13108, 12045),
+                new Point(16940, 12045),
+                new Point(9634, 12045)
+        };
+        assertEquals(1, new BruteCollinearPoints(points).numberOfSegments());
     }
 
 }
