@@ -1,3 +1,5 @@
+package ru.kdv.collinearPoints;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -5,7 +7,7 @@ import java.util.List;
 public class FastCollinearPointsOp {
     private LineSegment[] ls;
 
-    public FastCollinearPoints(Point[] points) {
+    public FastCollinearPointsOp(Point[] points) {
         // Corner cases
         if (points == null) throw new NullPointerException();
         int n = points.length;
@@ -43,9 +45,7 @@ public class FastCollinearPointsOp {
                 Point[] line = new Point[len];
                 line[0] = p[0];
 
-                for (int l = 1; l < len; l++) {
-                    line[l] = p[j + l - 1];
-                }
+                System.arraycopy(p, j + 1 - 1, line, 1, len - 1);
                 Arrays.sort(line);
                 // remove duplicate
                 if (line[0] == p[0]) {
@@ -55,7 +55,7 @@ public class FastCollinearPointsOp {
             }
         }
         // transform to array
-        ls = list.toArray(new LineSegment[list.size()]);
+        ls = list.toArray(new LineSegment[0]);
     }
 
     public int numberOfSegments() {

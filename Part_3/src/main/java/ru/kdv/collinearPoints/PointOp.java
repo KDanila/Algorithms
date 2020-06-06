@@ -1,8 +1,10 @@
+package ru.kdv.collinearPoints;
+
 import edu.princeton.cs.algs4.StdDraw;
 
 import java.util.Comparator;
 
-public class PointOp implements Comparable<Point> {
+public class PointOp implements Comparable<PointOp> {
     private final int x;     // x-coordinate of this point
     private final int y;     // y-coordinate of this point
 
@@ -12,7 +14,7 @@ public class PointOp implements Comparable<Point> {
      * @param x the <em>x</em>-coordinate of the point
      * @param y the <em>y</em>-coordinate of the point
      */
-    public Point(int x, int y) {
+    public PointOp(int x, int y) {
         /* DO NOT MODIFY */
         this.x = x;
         this.y = y;
@@ -32,7 +34,7 @@ public class PointOp implements Comparable<Point> {
      *
      * @param that the other point
      */
-    public void drawTo(Point that) {
+    public void drawTo(PointOp that) {
         /* DO NOT MODIFY */
         StdDraw.line(this.x, this.y, that.x, that.y);
     }
@@ -48,7 +50,7 @@ public class PointOp implements Comparable<Point> {
      * @param that the other point
      * @return the slope between this point and the specified point
      */
-    public double slopeTo(Point that) {
+    public double slopeTo(PointOp that) {
         if (this.x == that.x) {
             if (this.y == that.y) return Double.NEGATIVE_INFINITY;
             else return Double.POSITIVE_INFINITY;
@@ -69,7 +71,7 @@ public class PointOp implements Comparable<Point> {
      * point; and a positive integer if this point is greater than the
      * argument point
      */
-    public int compareTo(Point that) {
+    public int compareTo(PointOp that) {
         if (this.y < that.y) return -1;
         if (this.y == that.y) {
             if (this.x < that.x) return -1;
@@ -84,7 +86,7 @@ public class PointOp implements Comparable<Point> {
      *
      * @return the Comparator that defines this ordering on points
      */
-    public Comparator<Point> slopeOrder() {
+    public Comparator<PointOp> slopeOrder() {
         return new SlopeOrder();
     }
 
@@ -100,16 +102,13 @@ public class PointOp implements Comparable<Point> {
         return "(" + x + ", " + y + ")";
     }
 
-    private class SlopeOrder implements Comparator<Point> {
+    private class SlopeOrder implements Comparator<PointOp> {
 
         @Override
-        public int compare(Point o1, Point o2) {
+        public int compare(PointOp o1, PointOp o2) {
             double d1 = slopeTo(o1);
             double d2 = slopeTo(o2);
-            if (d1 < d2) return -1;
-            if (d1 == d2) return 0;
-            return 1;
-
+            return Double.compare(d1, d2);
         }
     }
 }

@@ -1,3 +1,5 @@
+package ru.kdv.collinearPoints;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -5,7 +7,7 @@ import java.util.List;
 public class BruteCollinearPointsOp {
     private LineSegment[] ls;
 
-    public BruteCollinearPoints(Point[] points) {
+    public BruteCollinearPointsOp(Point[] points) {
         // Corner cases
         if (points == null) throw new NullPointerException();
         int n = points.length;
@@ -42,7 +44,7 @@ public class BruteCollinearPointsOp {
             }
         }
         // transform to array
-        ls = list.toArray(new LineSegment[list.size()]);
+        ls = list.toArray(new LineSegment[0]);
     }
 
     public int numberOfSegments() {
