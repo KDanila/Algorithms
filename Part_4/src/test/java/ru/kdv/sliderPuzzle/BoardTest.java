@@ -1,6 +1,5 @@
 package ru.kdv.sliderPuzzle;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,20 +9,25 @@ class BoardTest {
     private Board board2x2;
     private Board board3x3;
     private Board board3x3unsorted;
+    private Board board3x3unsortedRightBottomCorner;
+    private Board board3x3unsortedLeftUpCorner;
+    private Board board3x3unsortedLeftMiddle;
 
     @BeforeEach
     void setUp() {
         int[][] twoSize = {{1, 2}, {3, 0}};
         int[][] threeSize = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
         int[][] threeSizeUnsorted = {{8, 1, 3}, {4, 0, 2}, {7, 6, 5}};
+        int[][] threeSizeUnsorted2 = {{8, 1, 3}, {4, 2, 5}, {7, 6, 0}};
+        int[][] threeSizeUnsorted3 = {{0, 1, 3}, {4, 2, 5}, {7, 6, 8}};
+        int[][] threeSizeUnsorted4 = {{4, 1, 3}, {0, 2, 5}, {7, 6, 8}};
 
         board2x2 = new Board(twoSize);
         board3x3 = new Board(threeSize);
         board3x3unsorted = new Board(threeSizeUnsorted);
-    }
-
-    @AfterEach
-    void tearDown() {
+        board3x3unsortedRightBottomCorner = new Board(threeSizeUnsorted2);
+        board3x3unsortedLeftUpCorner = new Board(threeSizeUnsorted3);
+        board3x3unsortedLeftMiddle = new Board(threeSizeUnsorted4);
     }
 
     @Test
@@ -34,10 +38,6 @@ class BoardTest {
     @Test
     void when3x3BoardShouldCorrectlyShowToString() {
         System.out.println(board3x3.toString());
-    }
-
-    @Test
-    void dimension() {
     }
 
     @Test
@@ -71,11 +71,37 @@ class BoardTest {
     }
 
     @Test
-    void testEquals() {
+    void whenUnsortedArrayNeighborsShouldAddFourNeighbors() {
+        int count = 0;
+        for (Board neighbor : board3x3unsorted.neighbors()) {
+            count++;
+        }
+        assertEquals(4, count);
+    }
+    @Test
+    void whenUnsortedArrayRightBottomCornerNeighborsShouldAddTwoNeighbors() {
+        int count = 0;
+        for (Board neighbor : board3x3unsortedRightBottomCorner.neighbors()) {
+            count++;
+        }
+        assertEquals(2, count);
     }
 
     @Test
-    void neighbors() {
+    void whenUnsortedArrayLeftUpNeighborsShouldAddTwoNeighbors() {
+        int count = 0;
+        for (Board neighbor : board3x3unsortedLeftUpCorner.neighbors()) {
+            count++;
+        }
+        assertEquals(2, count);
+    }
+    @Test
+    void whenUnsortedArrayLeftMiddleNeighborsShouldAddTwoNeighbors() {
+        int count = 0;
+        for (Board neighbor : board3x3unsortedLeftMiddle.neighbors()) {
+            count++;
+        }
+        assertEquals(3, count);
     }
 
     @Test
