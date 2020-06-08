@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardTest {
     private Board board2x2;
     private Board board3x3;
+    private Board board3x3copy;
     private Board board3x3unsorted;
     private Board board3x3unsortedRightBottomCorner;
     private Board board3x3unsortedLeftUpCorner;
@@ -24,6 +25,7 @@ class BoardTest {
 
         board2x2 = new Board(twoSize);
         board3x3 = new Board(threeSize);
+        board3x3copy = new Board(threeSize);
         board3x3unsorted = new Board(threeSizeUnsorted);
         board3x3unsortedRightBottomCorner = new Board(threeSizeUnsorted2);
         board3x3unsortedLeftUpCorner = new Board(threeSizeUnsorted3);
@@ -102,6 +104,21 @@ class BoardTest {
             count++;
         }
         assertEquals(3, count);
+    }
+
+    @Test
+    void whenBoardsSameShouldReturnEqual() {
+        assertTrue(board3x3.equals(board3x3));
+    }
+
+    @Test
+    void whenBoardsCopyOfEachOtherShouldReturnEqual() {
+        assertTrue(board3x3.equals(board3x3copy));
+    }
+
+    @Test
+    void whenBoardsIsNotSameShouldReturnNotEqual() {
+        assertFalse(board3x3.equals(board3x3unsorted));
     }
 
     @Test
