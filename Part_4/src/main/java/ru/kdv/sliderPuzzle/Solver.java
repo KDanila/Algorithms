@@ -4,33 +4,68 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Solver {
-    private final Board board;
+    private SearchNode lastNode;
     private final MinPQ<SearchNode> priorityQueue;
+    private boolean isSolvable;
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         if (initial == null)
             throw new IllegalArgumentException();
-        board = initial;
-        while (true) {
+        isSolvable = false;
+        lastNode = null;
+        priorityQueue = new MinPQ<>();
+        priorityQueue.insert(new SearchNode(initial, 0, null));
+        while (!isSolvable) {
+            SearchNode currentNode = priorityQueue.delMin();
+            Board board = currentNode.getBoard();
+            if (board.isGoal()) {
+                isSolvable = true;
+                lastNode = currentNode;
+                break;
+            }
+            if (board.hamming() == 2 && board.twin().isGoal()) {
+                isSolvable = false;
+                break;
+            }
+            int moves = currentNode.getMoves();
+            Board previousBoard = moves > 0 ? currentNode.getPrevious().getBoard() : null;
+            for (Board neighbor : board.neighbors()) {
+                if (previousBoard != null && neighbor.equals(previousBoard)) {
+                    continue;
+                }
+                priorityQueue.insert(new SearchNode(neighbor, currentNode.getMoves() + 1, currentNode));
+            }
 
         }
     }
 
     // is the initial board solvable? (see below)
     public boolean isSolvable() {
-        return false;
+        return isSolvable;
     }
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        return -1;
+        if (!isSolvable) return -1;
+        return lastNode.getMoves();
     }
 
     // sequence of boards in a shortest solution; null if unsolvable
     public Iterable<Board> solution() {
-        return null;
+        if (!isSolvable())
+            return null;
+        List<Board> solutionBoard = new ArrayList<>();
+        solutionBoard.add(lastNode.getBoard());
+        while (lastNode.getPrevious() != null) {
+            solutionBoard.add(lastNode.getPrevious().getBoard());
+            lastNode = lastNode.getPrevious();
+        }
+        return solutionBoard;
     }
 
     // test client (see below)
@@ -70,11 +105,23 @@ public class Solver {
 
         @Override
         public int compareTo(SearchNode o) {
-            return 0;
+            return priority() - o.priority();
         }
 
-        public int priority(){
+        public int priority() {
             return board.manhattan() + moves;
+        }
+
+        public Board getBoard() {
+            return board;
+        }
+
+        public int getMoves() {
+            return moves;
+        }
+
+        public SearchNode getPrevious() {
+            return previous;
         }
     }
 }

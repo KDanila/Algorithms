@@ -1,7 +1,5 @@
 package ru.kdv.sliderPuzzle;
 
-import edu.princeton.cs.algs4.MinPQ;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,7 +97,11 @@ public class Board {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Board board = (Board) o;
-        return Arrays.equals(tiles, board.tiles);
+        for (int i = 0; i < tiles.length; i++) {
+            if (!Arrays.equals(tiles[i], board.tiles[i]))
+                return false;
+        }
+        return true;
     }
 
     // all neighboring boards
