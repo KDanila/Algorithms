@@ -1,13 +1,12 @@
-package main.java.sliderPuzzle.kdv.union_find.impl;
+package main.java.sliderPuzzle.ru.kdv.union_find.impl;
 
-import edu.princeton.cs.algs4.QuickFindUF;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
-import main.java.sliderPuzzle.kdv.union_find.UnionFind;
+import main.java.sliderPuzzle.ru.kdv.union_find.UnionFind;
 
-public class QuickFind implements UnionFind {
-    private int[] id;    // id[i] = component identifier of i
-    private int count;   // number of components
+public class QuickUnion implements UnionFind {
+    private int[] parent;  // parent[i] = parent of i
+    private int count;     // number of components
 
     /**
      * Initializes an empty union-find data structure with
@@ -17,17 +16,12 @@ public class QuickFind implements UnionFind {
      * @param  n the number of elements
      * @throws IllegalArgumentException if {@code n < 0}
      */
-    public void QuickFindUF(int n) {
+    public QuickUnion(int n) {
+        parent = new int[n];
         count = n;
-        id = new int[n];
-        for (int i = 0; i < n; i++)
-            id[i] = i;
-    }
-
-    public int find(int []a){
-        if(a.length==0)
-            return -1;
-        return a[0];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
     }
 
     /**
@@ -48,12 +42,14 @@ public class QuickFind implements UnionFind {
      */
     public int find(int p) {
         validate(p);
-        return id[p];
+        while (p != parent[p])
+            p = parent[p];
+        return p;
     }
 
     // validate that p is a valid index
     private void validate(int p) {
-        int n = id.length;
+        int n = parent.length;
         if (p < 0 || p >= n) {
             throw new IllegalArgumentException("index " + p + " is not between 0 and " + (n-1));
         }
@@ -72,9 +68,7 @@ public class QuickFind implements UnionFind {
      */
     @Deprecated
     public boolean connected(int p, int q) {
-        validate(p);
-        validate(q);
-        return id[p] == id[q];
+        return find(p) == find(q);
     }
 
     /**
@@ -87,16 +81,10 @@ public class QuickFind implements UnionFind {
      *         both {@code 0 <= p < n} and {@code 0 <= q < n}
      */
     public void union(int p, int q) {
-        validate(p);
-        validate(q);
-        int pID = id[p];   // needed for correctness
-        int qID = id[q];   // to reduce the number of array accesses
-
-        // p and q are already in the same component
-        if (pID == qID) return;
-
-        for (int i = 0; i < id.length; i++)
-            if (id[i] == pID) id[i] = qID;
+        int rootP = find(p);
+        int rootQ = find(q);
+        if (rootP == rootQ) return;
+        parent[rootP] = rootQ;
         count--;
     }
 
@@ -111,7 +99,7 @@ public class QuickFind implements UnionFind {
      */
     public static void main(String[] args) {
         int n = StdIn.readInt();
-        QuickFindUF uf = new QuickFindUF(n);
+        QuickUnion uf = new QuickUnion(n);
         while (!StdIn.isEmpty()) {
             int p = StdIn.readInt();
             int q = StdIn.readInt();
@@ -121,4 +109,5 @@ public class QuickFind implements UnionFind {
         }
         StdOut.println(uf.count() + " components");
     }
+
 }

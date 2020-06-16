@@ -1,4 +1,4 @@
-package main.java.sliderPuzzle.kdv.percolation;
+package main.java.ru.kdv.percolation;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 

@@ -1,4 +1,4 @@
-package main.java.sliderPuzzle.kdv.queues;
+package main.java.sliderPuzzle.ru.kdv.queues;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

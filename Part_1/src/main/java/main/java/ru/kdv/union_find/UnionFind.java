@@ -1,4 +1,4 @@
-package main.java.sliderPuzzle.kdv.union_find;
+package main.java.sliderPuzzle.ru.kdv.union_find;
 
 public interface UnionFind {
     int count();

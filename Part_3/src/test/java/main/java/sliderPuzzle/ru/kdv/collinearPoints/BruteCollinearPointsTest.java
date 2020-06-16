@@ -1,4 +1,4 @@
-package main.java.sliderPuzzle.kdv.collinearPoints;
+package main.java.sliderPuzzle.ru.kdv.collinearPoints;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

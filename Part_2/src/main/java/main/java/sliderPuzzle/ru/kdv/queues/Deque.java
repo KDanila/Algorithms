@@ -1,4 +1,4 @@
-package main.java.sliderPuzzle.kdv.queues;
+package main.java.sliderPuzzle.ru.kdv.queues;
 
 import lombok.Data;
 import lombok.Getter;

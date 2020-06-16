@@ -1,4 +1,4 @@
-package main.java.sliderPuzzle.kdv.percolation;
+package main.java.sliderPuzzle.ru.kdv.percolation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,12 +1,13 @@
-package main.java.sliderPuzzle.kdv.union_find.impl;
+package main.java.sliderPuzzle.ru.kdv.union_find.impl;
 
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
-import main.java.sliderPuzzle.kdv.union_find.UnionFind;
+import main.java.sliderPuzzle.ru.kdv.union_find.UnionFind;
 
-public class QuickUnion implements UnionFind {
-    private int[] parent;  // parent[i] = parent of i
-    private int count;     // number of components
+public class WeightedQuickUnion implements UnionFind {
+    private int[] parent;   // parent[i] = parent of i
+    private int[] size;     // size[i] = number of elements in subtree rooted at i
+    private int count;      // number of components
 
     /**
      * Initializes an empty union-find data structure with
@@ -16,11 +17,13 @@ public class QuickUnion implements UnionFind {
      * @param  n the number of elements
      * @throws IllegalArgumentException if {@code n < 0}
      */
-    public QuickUnion(int n) {
-        parent = new int[n];
+    public WeightedQuickUnion(int n) {
         count = n;
+        parent = new int[n];
+        size = new int[n];
         for (int i = 0; i < n; i++) {
             parent[i] = i;
+            size[i] = 1;
         }
     }
 
@@ -47,14 +50,6 @@ public class QuickUnion implements UnionFind {
         return p;
     }
 
-    // validate that p is a valid index
-    private void validate(int p) {
-        int n = parent.length;
-        if (p < 0 || p >= n) {
-            throw new IllegalArgumentException("index " + p + " is not between 0 and " + (n-1));
-        }
-    }
-
     /**
      * Returns true if the two elements are in the same set.
      *
@@ -71,6 +66,14 @@ public class QuickUnion implements UnionFind {
         return find(p) == find(q);
     }
 
+    // validate that p is a valid index
+    private void validate(int p) {
+        int n = parent.length;
+        if (p < 0 || p >= n) {
+            throw new IllegalArgumentException("index " + p + " is not between 0 and " + (n-1));
+        }
+    }
+
     /**
      * Merges the set containing element {@code p} with the
      * the set containing element {@code q}.
@@ -84,9 +87,19 @@ public class QuickUnion implements UnionFind {
         int rootP = find(p);
         int rootQ = find(q);
         if (rootP == rootQ) return;
-        parent[rootP] = rootQ;
+
+        // make smaller root point to larger one
+        if (size[rootP] < size[rootQ]) {
+            parent[rootP] = rootQ;
+            size[rootQ] += size[rootP];
+        }
+        else {
+            parent[rootQ] = rootP;
+            size[rootP] += size[rootQ];
+        }
         count--;
     }
+
 
     /**
      * Reads an integer {@code n} and a sequence of pairs of integers
@@ -99,7 +112,7 @@ public class QuickUnion implements UnionFind {
      */
     public static void main(String[] args) {
         int n = StdIn.readInt();
-        QuickUnion uf = new QuickUnion(n);
+        WeightedQuickUnion uf = new WeightedQuickUnion(n);
         while (!StdIn.isEmpty()) {
             int p = StdIn.readInt();
             int q = StdIn.readInt();
@@ -109,5 +122,4 @@ public class QuickUnion implements UnionFind {
         }
         StdOut.println(uf.count() + " components");
     }
-
 }
