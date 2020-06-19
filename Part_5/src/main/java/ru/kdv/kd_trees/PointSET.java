@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static java.lang.Double.compare;
-
 public class PointSET {
 
-    Set<Point2D> points;
+    private final Set<Point2D> points;
 
     // construct an empty set of points
     public PointSET() {
@@ -31,8 +29,8 @@ public class PointSET {
 
     // add the point to the set (if it is not already in the set)
     public void insert(Point2D p) {
-        if(p == null){
-            throw new NullPointerException();
+        if (p == null) {
+            throw new IllegalArgumentException();
         }
         if (!points.contains(p)) {
             points.add(p);
@@ -41,6 +39,9 @@ public class PointSET {
 
     // does the set contain point p?
     public boolean contains(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         return points.contains(p);
     }
 
@@ -53,8 +54,8 @@ public class PointSET {
 
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
-        if(rect == null){
-            throw new NullPointerException();
+        if (rect == null) {
+            throw new IllegalArgumentException();
         }
         List<Point2D> toReturn = new ArrayList<>();
         for (Point2D point : points) {
@@ -67,13 +68,16 @@ public class PointSET {
 
     // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         Point2D nearestPoint = null;
         double minDistance = -1.0;
         double distance;
         for (Point2D point : points) {
             distance = point.distanceTo(p);
-            if (compare(minDistance, -1.0) == 0
-                    && compare(distance, minDistance) < 0) {
+            if (Double.compare(minDistance, -1.0) == 0
+                    && Double.compare(distance, minDistance) < 0) {
                 minDistance = distance;
                 nearestPoint = point;
             }
@@ -83,6 +87,6 @@ public class PointSET {
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
-
+        //no need
     }
 }

@@ -6,9 +6,7 @@ import edu.princeton.cs.algs4.RectHV;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static java.util.Objects.requireNonNull;
-
+import java.util.Objects;
 
 public class KdTree {
     private int size;
@@ -16,8 +14,8 @@ public class KdTree {
 
     private class Node {
         boolean isVertical;
-        private Point2D point;
-        private RectHV rectangle;
+        private final Point2D point;
+        private final RectHV rectangle;
         private Node left;
         private Node right;
 
@@ -68,7 +66,7 @@ public class KdTree {
 
     // add the point to the set (if it is not already in the set)
     public void insert(Point2D p) {
-        requireNonNull(p);
+        Objects.requireNonNull(p);
         if (root == null) {
             root = new Node(p, new RectHV(0, 0, 1, 1), true);
             size++;
@@ -97,7 +95,7 @@ public class KdTree {
 
     // does the set contain point p?
     public boolean contains(Point2D p) {
-        requireNonNull(p);
+        Objects.requireNonNull(p);
         Node node = root;
         while (node != null) {
             if (node.point.equals(p)) {
@@ -110,12 +108,12 @@ public class KdTree {
 
     // draw all points to standard draw
     public void draw() {
-
+        range(new RectHV(0, 0, 1, 1)).forEach(point -> point.draw());
     }
 
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
-        requireNonNull(rect);
+        Objects.requireNonNull(rect);
         if (root == null) {
             return Collections.emptyList();
         }
@@ -141,12 +139,34 @@ public class KdTree {
 
     // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(Point2D p) {
-        requireNonNull(p);
-        return null;
+        Objects.requireNonNull(p);
+        return isEmpty() ? null : nearest(p, root.point, root);
+    }
+
+    private Point2D nearest(Point2D target, Point2D closest, Node node) {
+        if (node == null) {
+            return closest;
+        }
+
+        double closestDist = closest.distanceSquaredTo(target);
+        if (node.rectangle.distanceSquaredTo(target) < closestDist) {
+            double nodeDist = node.point.distanceSquaredTo(target);
+            if (nodeDist < closestDist) {
+                closest = node.point;
+            }
+            if (node.isRightOrTopOf(target)) {
+                closest = nearest(target, closest, node.left);
+                closest = nearest(target, closest, node.right);
+            } else {
+                closest = nearest(target, closest, node.right);
+                closest = nearest(target, closest, node.left);
+            }
+        }
+        return closest;
     }
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
-
+        //1
     }
 }
