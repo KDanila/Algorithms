@@ -123,6 +123,9 @@ public class KdTree {
     }
 
     private void addRecursively(Node node, RectHV rect, List<Point2D> toReturn) {
+        if (node == null) {
+            return;
+        }
         if (rect.contains(node.point)) {
             toReturn.add(node.point);
             addRecursively(node.left, rect, toReturn);

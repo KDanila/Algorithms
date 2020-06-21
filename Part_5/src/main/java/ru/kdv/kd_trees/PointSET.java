@@ -5,12 +5,11 @@ import edu.princeton.cs.algs4.RectHV;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
 public class PointSET {
 
-    private final Set<Point2D> points;
+    private final TreeSet<Point2D> points;
 
     // construct an empty set of points
     public PointSET() {
@@ -71,18 +70,30 @@ public class PointSET {
         if (p == null) {
             throw new IllegalArgumentException();
         }
-        Point2D nearestPoint = null;
-        double minDistance = -1.0;
-        double distance;
-        for (Point2D point : points) {
-            distance = point.distanceTo(p);
-            if (Double.compare(minDistance, -1.0) == 0
-                    && Double.compare(distance, minDistance) < 0) {
-                minDistance = distance;
-                nearestPoint = point;
+        if (isEmpty()) {
+            return null;
+        }
+
+        Point2D next = points.ceiling(p);
+        Point2D prev = points.floor(p);
+        if (next == null && prev == null) {
+            return null;
+        }
+
+        double distNext = next == null ? Double.MAX_VALUE : p.distanceTo(next);
+        double distPrev = prev == null ? Double.MAX_VALUE : p.distanceTo(prev);
+        double d = Math.min(distNext, distPrev);
+
+        Point2D minPoint = new Point2D(p.x(), p.y() - d);
+        Point2D maxPoint = new Point2D(p.x(), p.y() + d);
+        Point2D nearest = next == null ? prev : next;  // cannot be both null
+
+        for (Point2D candidate: points.subSet(minPoint, true, maxPoint, true)) {
+            if (p.distanceTo(candidate) < p.distanceTo(nearest)) {
+                nearest = candidate;
             }
         }
-        return nearestPoint;
+        return nearest;
     }
 
     // unit testing of the methods (optional)
